@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="id" data-motion="on">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Roby Setiadi – IT Support</title>
+<meta name="description" content="Portofolio Roby Setiadi, IT Support di Bekasi: server file, jaringan MikroTik, website, dan musik.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%231F5FD1'/><text x='16' y='23' font-size='19' font-weight='700' text-anchor='middle' fill='white' font-family='sans-serif'>R</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F6F7F9;--sf:#fff;--ink:#14202E;--mut:#5A6878;--line:#DDE2E8;--ac:#1F5FD1;--ease:cubic-bezier(.2,.7,.2,1)}
+:root[data-theme="dark"]{--bg:#0F161E;--sf:#16202B;--ink:#E9EEF4;--mut:#9AABBD;--line:#25323F;--ac:#6AA3FF}
+*{box-sizing:border-box;margin:0}
+body{font-family:"Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--bg);color:var(--ink);line-height:1.65;overflow-x:hidden}
+a{color:var(--ac)}
+:focus-visible{outline:3px solid var(--ac);outline-offset:3px;border-radius:4px}
+.wrap{max-width:960px;margin:0 auto;padding:0 24px}
+section{padding:48px 0;border-top:1px solid var(--line)}
+h2{font-size:1.35rem;font-weight:800;margin-bottom:20px}
+p{max-width:64ch}
+button{font:inherit;color:inherit;cursor:pointer}
+
+/* ==================================================
+   IKON — satu sistem
+   Semua ikon: grid 24, garis bulat. Ketebalan garis di layar
+   dibuat sama (~1.5px) di semua ukuran lewat stroke-width.
+   .i.s = 16px (di samping teks)  |  .i = 20px (tombol ikon)  |  .i.l = 24px (di dalam kotak .ic)
+================================================== */
+.i{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.i.s{width:16px;height:16px;stroke-width:2.25}
+.i.l{width:24px;height:24px;stroke-width:1.5}
+.ic{width:44px;height:44px;border:1px solid var(--line);background:var(--sf);border-radius:10px;display:grid;place-items:center;color:var(--ac);flex:none;transition:background .2s,color .2s,border-color .2s}
+
+#app nav{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
+#app nav .wrap{display:flex;align-items:center;gap:4px;height:56px;padding-right:232px}
+#app nav b{font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hero{padding:56px 0 48px}
+.grid{display:grid;grid-template-columns:1.05fr .95fr;gap:40px;align-items:center}
+h1{font-size:clamp(2.4rem,6vw,3.7rem);line-height:1.05;font-weight:800;letter-spacing:-.03em}
+.role{font-size:1.1rem;font-weight:700;color:var(--ac);margin:10px 0 14px}
+.where{display:flex;align-items:center;gap:6px;color:var(--mut);font-size:.92rem;margin-top:14px}
+.cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:24px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border-radius:8px;font-weight:700;text-decoration:none;border:2px solid var(--ink);color:var(--ink);transition:border-color .18s,background .18s,color .18s,transform .18s}
+.btn.p{background:var(--ink);color:var(--bg)}
+.btn:hover{border-color:var(--ac)}.btn.p:hover{background:var(--ac);color:#fff}
+.btn:active{transform:scale(.98)}
+.dg{background:var(--sf);border:1px solid var(--line);border-radius:12px;padding:12px}
+.dg svg.d{display:block;width:100%;height:auto}
+.n rect{fill:var(--sf);stroke:var(--ink);stroke-width:2;transition:stroke .2s,fill .2s}
+.n text{fill:var(--ink);font:600 11px "Plus Jakarta Sans",sans-serif;text-anchor:start;pointer-events:none;transition:fill .2s}
+.n use{stroke:var(--ink);fill:none;stroke-width:2.25;stroke-linecap:round;stroke-linejoin:round;pointer-events:none;transition:stroke .2s}
+.n{cursor:pointer}.n:hover rect{stroke:var(--ac)}
+.n.on rect{fill:var(--ac);stroke:var(--ac)}.n.on text{fill:#fff}.n.on use{stroke:#fff}
+.lk{stroke:var(--ac);stroke-width:2;fill:none;stroke-dasharray:5 6;animation:fl 1.4s linear infinite}
+@keyframes fl{to{stroke-dashoffset:-22}}
+#info{margin-top:10px;padding:12px 14px;border-radius:8px;background:var(--bg);font-size:.92rem;min-height:84px}
+#info b{display:block;margin-bottom:2px}#info span{color:var(--mut)}
+#info.swap{animation:swap .35s var(--ease)}
+@keyframes swap{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+.tabs{display:flex;flex-wrap:wrap;gap:20px;margin-bottom:8px;border-bottom:1px solid var(--line)}
+.tab{background:none;border:0;border-bottom:3px solid transparent;padding:6px 0;margin-bottom:-1px;color:var(--mut);font-weight:500;transition:color .18s,border-color .18s}
+.tab:hover{color:var(--ink)}
+.tab[aria-pressed="true"]{color:var(--ink);border-color:var(--ac);font-weight:700}
+.pj{display:flex;gap:18px;padding:24px 0;border-bottom:1px solid var(--line)}
+.pj[hidden]{display:none}
+.pj:hover .ic{background:var(--ac);color:#fff;border-color:var(--ac)}
+.pj h3{font-size:1.1rem;font-weight:800}
+.meta{color:var(--mut);font-size:.88rem;margin:1px 0 8px}
+.pj p{color:var(--mut);font-size:.97rem}
+.stack{font-size:.86rem;color:var(--ink);margin-top:8px}
+.certs{list-style:none;padding:0;display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+.certs li{display:flex;flex-direction:column;gap:14px;background:var(--sf);border:1px solid var(--line);border-radius:12px;padding:20px;transition:border-color .2s,transform .2s}
+.certs li:hover{border-color:var(--ac)}
+.certs li:hover .ic{background:var(--ac);color:#fff;border-color:var(--ac)}
+.certs .ct{display:flex;flex-direction:column;flex:1}
+.certs b{display:block;line-height:1.35}.certs small{display:block;color:var(--mut);font-size:.88rem;margin-top:4px}
+.certs .act{margin-top:auto;padding-top:14px;border-top:1px solid var(--line)}
+.act{display:flex;gap:16px;margin-top:6px;font-size:.88rem}
+.act button,.act a{display:inline-flex;align-items:center;gap:6px;background:none;border:0;padding:0;color:var(--ac);font-weight:700;text-decoration:none;transition:opacity .18s}
+.act button:hover,.act a:hover{opacity:.75}
+.tl{list-style:none;padding:0;border-left:2px solid var(--line);margin-left:6px}
+.tl li{position:relative;padding:0 0 22px 26px}
+.tl li::before{content:"";position:absolute;left:-8px;top:6px;width:14px;height:14px;border-radius:50%;background:var(--bg);border:3px solid var(--line);transition:border-color .2s,background .2s}
+.tl li:first-child::before{border-color:var(--ac);background:var(--ac)}
+@keyframes ring{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--ac) 45%,transparent)}100%{box-shadow:0 0 0 10px transparent}}
+.tl b{display:block}.tl small{color:var(--mut)}.tl p{color:var(--mut);font-size:.94rem}
+.sk{display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
+.sk h3{font-size:1rem;margin-bottom:6px;display:flex;align-items:center;gap:8px}
+.sk h3 .i{color:var(--ac)}
+.sk ul{padding-left:18px;color:var(--mut);font-size:.95rem}
+.links{display:flex;flex-wrap:wrap;gap:12px 28px;margin-top:6px}
+.links a{display:inline-flex;align-items:center;gap:8px;font-weight:700;background:none;border:0;padding:4px 0;color:var(--ink);text-decoration:none;transition:color .18s}
+.links a:hover{color:var(--ac)}
+footer{text-align:center;color:var(--mut);font-size:.85rem;padding:20px 0 36px;border-top:1px solid var(--line)}
+@media(max-width:760px){.grid,.sk,.certs{grid-template-columns:1fr}.sk{gap:20px}}
+
+/* ==================================================
+   SISTEM LAYAR: #start, #menu, #app
+================================================== */
+#start,#menu,#app{display:none}
+body[data-v=start] #start:not([hidden]){display:flex}
+body[data-v=menu] #menu{display:flex}
+body[data-v]:not([data-v=start]):not([data-v=menu]) #app{display:block}
+
+body.fading #start,
+body.fading #menu,
+body.fading #app{opacity:0!important;transition:opacity .18s ease}
+body:not(.fading) #start,
+body:not(.fading) #menu,
+body:not(.fading) #app{opacity:1;transition:opacity .4s var(--ease)}
+
+/* Kontrol atas: selalu tersedia, termasuk tombol kembali ke START */
+.topctrl{position:fixed;top:10px;right:16px;z-index:20;display:flex;gap:6px;align-items:center}
+.topctrl button{display:inline-flex;align-items:center;justify-content:center;gap:6px;height:36px;min-width:36px;border:1px solid var(--line);background:var(--sf);border-radius:8px;padding:0 10px;font-size:.88rem;white-space:nowrap;transition:border-color .18s,color .18s,background .18s,transform .18s}
+.topctrl button:hover{border-color:var(--ac);color:var(--ac)}
+.topctrl button:active{transform:scale(.95)}
+.topctrl button .i{transition:transform .35s var(--ease)}
+body[data-v=start] #homebtn,body[data-v=start] #cpbtn{display:none}
+body[data-v]:not([data-v=start]):not([data-v=menu]) .topctrl button span{display:none}
+body[data-v]:not([data-v=start]):not([data-v=menu]) .topctrl button{padding:0}
+@media(max-width:560px){.topctrl{right:10px;gap:5px}.topctrl button span{display:none!important}.topctrl button{padding:0}}
+@media(max-width:560px){#app nav .wrap{padding-right:216px}}
+
+.back{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--sf);border-radius:8px;padding:5px 12px;font-size:.88rem;margin-right:10px;transition:border-color .18s,color .18s,background .18s}
+.back:hover{border-color:var(--ac);color:var(--ac)}
+
+/* ==================================================
+   START
+================================================== */
+#start{min-height:100vh;background:var(--ink);color:var(--bg);flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;padding:24px;position:relative;overflow:hidden}
+.big{font-size:clamp(2.6rem,9vw,5rem);font-weight:800;letter-spacing:-.03em;line-height:1;transition:opacity .5s var(--ease),transform .5s var(--ease)}
+#start p{opacity:.75;transition:opacity .5s var(--ease)}
+#start.boot .big{opacity:0;transform:translateY(-8px)}
+#start.boot p,#start.boot .startbtn,#start.boot small{opacity:0}
+.boot-lines{position:absolute;left:0;right:0;bottom:12%;display:flex;flex-direction:column;align-items:center;gap:6px;font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;font-size:.85rem;opacity:0;pointer-events:none;transition:opacity .4s var(--ease)}
+#start.boot .boot-lines{opacity:.85}
+.boot-lines span{opacity:0;animation:fadein .45s var(--ease) forwards}
+.boot-lines span:nth-child(1){animation-delay:.2s}
+.boot-lines span:nth-child(2){animation-delay:.55s}
+.boot-lines span:nth-child(3){animation-delay:.9s}
+@keyframes fadein{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+.vroom{position:absolute;left:-30%;top:50%;height:2px;width:30%;background:linear-gradient(90deg,transparent,var(--ac),transparent);opacity:0;transform:translateY(-50%)}
+#start.boot .vroom{animation:vroom .7s var(--ease) .35s}
+@keyframes vroom{0%{left:-30%;opacity:1}100%{left:130%;opacity:0}}
+.sd{width:220px;height:36px}.sd .lk{stroke:currentColor;opacity:.7}.sd circle{fill:currentColor;transform-box:fill-box;transform-origin:center}
+@keyframes pulse{50%{transform:scale(.7);opacity:.6}}
+.startbtn{margin-top:16px;background:none;color:inherit;border:2px solid currentColor;border-radius:8px;padding:14px 48px;font-weight:800;letter-spacing:.08em;transition:background .25s,color .25s,transform .2s,opacity .5s}
+.startbtn:hover{background:var(--bg);color:var(--ink);transform:scale(1.02)}
+.startbtn:active{transform:scale(.98)}
+@keyframes bl{50%{opacity:.45}}
+#start small{opacity:.55;font-size:.82rem;transition:opacity .5s}
+
+/* Animasi masuk layar START (diputar ulang tiap kali kembali ke START) */
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes pop{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:none}}
+body[data-v=start]:not(.fading) .sd{animation:rise .7s var(--ease) backwards}
+body[data-v=start]:not(.fading) .big{animation:rise .8s var(--ease) .1s backwards}
+body[data-v=start]:not(.fading) #start p{animation:rise .8s var(--ease) .25s backwards}
+body[data-v=start]:not(.fading) .startbtn{animation:rise .8s var(--ease) .4s backwards}
+body[data-v=start]:not(.fading) .startbtn:hover{animation:none}
+body[data-v=start]:not(.fading) #start small{animation:rise .8s var(--ease) .55s backwards}
+#start.boot .startbtn{animation:none!important}
+
+/* ==================================================
+   MENU
+================================================== */
+#menu{min-height:100vh;flex-direction:column;justify-content:center;max-width:620px;margin:0 auto;padding:72px 24px 40px;width:100%}
+.mt{font-weight:800;color:var(--mut);font-size:.95rem;margin-bottom:14px}
+#ml{list-style:none;padding:0;border-top:1px solid var(--line)}
+#ml button{display:flex;align-items:center;gap:16px;width:100%;text-align:left;background:none;border:0;border-bottom:1px solid var(--line);padding:12px 8px;transition:background .2s var(--ease),padding-left .2s var(--ease),color .2s var(--ease)}
+#ml button:hover,#ml button:focus-visible{background:var(--sf);padding-left:16px;color:var(--ac)}
+#ml button:hover .ic,#ml button:focus-visible .ic{background:var(--ac);color:#fff;border-color:var(--ac)}
+#ml .tx{flex:1}#ml b{display:block;font-size:1.2rem}#ml small{color:var(--mut)}
+#ml .arr{color:var(--mut);transition:transform .2s var(--ease),color .2s}
+#ml button:hover .arr,#ml button:focus-visible .arr{transform:translateX(4px);color:var(--ac)}
+.back2{margin-top:22px;background:none;border:0;color:var(--mut);display:inline-flex;gap:6px;align-items:center;align-self:flex-start;transition:color .18s}
+.back2:hover{color:var(--ac)}
+
+body[data-v=menu]:not(.fading) #menu .mt,
+body[data-v=menu]:not(.fading) #menu #ml li,
+body[data-v=menu]:not(.fading) #menu .back2{animation:menuIn .5s var(--ease) backwards}
+body[data-v=menu]:not(.fading) #menu .mt{animation-delay:.05s}
+body[data-v=menu]:not(.fading) #menu #ml li:nth-child(1){animation-delay:.1s}
+body[data-v=menu]:not(.fading) #menu #ml li:nth-child(2){animation-delay:.14s}
+body[data-v=menu]:not(.fading) #menu #ml li:nth-child(3){animation-delay:.18s}
+body[data-v=menu]:not(.fading) #menu #ml li:nth-child(4){animation-delay:.22s}
+body[data-v=menu]:not(.fading) #menu #ml li:nth-child(5){animation-delay:.26s}
+body[data-v=menu]:not(.fading) #menu #ml li:nth-child(6){animation-delay:.3s}
+body[data-v=menu]:not(.fading) #menu #ml li:nth-child(7){animation-delay:.34s}
+body[data-v=menu]:not(.fading) #menu .back2{animation-delay:.4s}
+@keyframes menuIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+/* ==================================================
+   HALAMAN
+   Isi tiap halaman muncul berurutan (--i diisi lewat JS).
+   Pakai fill "backwards" supaya efek hover tidak tertimpa.
+================================================== */
+.page{display:none}
+section.page{border-top:0;padding:32px 0 48px}
+section[data-p=experience]+section[data-p=experience]{border-top:1px solid var(--line)}
+.page.on{display:block;animation:pageIn .35s var(--ease) backwards}
+@keyframes pageIn{from{opacity:0}to{opacity:1}}
+.page.on :is(.pj,.certs li,.tl li,.sk>div,.cvc){animation:fade .4s var(--ease) backwards;animation-delay:calc(var(--i,0)*50ms + 80ms)}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+.page.on .dg{animation:pop .6s var(--ease) .2s backwards}
+.page.on .n{animation:rise .5s var(--ease) backwards;animation-delay:calc(var(--i,0)*90ms + 450ms)}
+.page.on #tl2 li{animation:rise .45s var(--ease) backwards;animation-delay:calc(var(--i,0)*70ms + 120ms)}
+
+.pl{border:1px solid var(--line);background:var(--sf);border-radius:12px;padding:18px;margin:18px 0 8px;max-width:560px}
+.now{display:flex;align-items:center;gap:14px}
+#pp{width:48px;height:48px;border-radius:50%;border:0;background:var(--ac);color:#fff;display:grid;place-items:center;flex:none;transition:transform .18s,opacity .18s}
+#pp .i{fill:currentColor;stroke:currentColor;stroke-width:1.5}
+#pp:not(:disabled):hover{transform:scale(1.06)}
+#pp:disabled{opacity:.4;cursor:default}
+.now small{display:block;color:var(--mut)}
+#seek{width:100%;margin-top:14px;accent-color:var(--ac)}
+.tm{display:flex;justify-content:space-between;color:var(--mut);font-size:.8rem}
+#tl2{list-style:none;padding:0;max-width:560px}
+#tl2 li{display:flex;align-items:center;justify-content:space-between;gap:12px;border-bottom:1px solid var(--line)}
+#tl2 li button{flex:1;display:flex;gap:14px;align-items:center;background:none;border:0;text-align:left;padding:14px 4px;transition:color .18s}
+#tl2 li button:hover b{color:var(--ac)}
+#tl2 .mn{font-size:.82rem;color:var(--mut);width:24px}
+#tl2 button.on b{color:var(--ac)}
+#tl2 b{display:block;transition:color .18s}#tl2 small{color:var(--mut)}
+#tl2 a{font-size:.85rem;font-weight:700;transition:opacity .18s}
+#tl2 a:hover{opacity:.75}
+#tl2 .empty{display:block;padding:20px 0;color:var(--mut);border-bottom:1px dashed var(--line)}
+.eq{margin-left:auto;display:flex;gap:3px;align-items:flex-end;height:22px}
+.eq i{width:4px;height:6px;background:var(--ac);border-radius:2px}
+.eq.on i{animation:eq .9s ease-in-out infinite}
+.eq.on i:nth-child(2){animation-delay:.2s}.eq.on i:nth-child(3){animation-delay:.4s}.eq.on i:nth-child(4){animation-delay:.1s}
+@keyframes eq{50%{height:22px}}
+
+.cvs{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;max-width:620px;margin-top:6px}
+.cvc{display:flex;flex-direction:column;gap:6px;background:var(--sf);border:1px solid var(--line);border-radius:12px;padding:22px;text-decoration:none;color:var(--ink);transition:border-color .2s,transform .2s}
+.cvc:hover{border-color:var(--ac)}
+.cvc .ic{margin-bottom:6px}
+.cvc:hover .ic{background:var(--ac);color:#fff;border-color:var(--ac)}
+.cvc small{color:var(--mut)}.cvc span{display:inline-flex;align-items:center;gap:6px;color:var(--ac);font-weight:700;margin-top:8px}
+@media(max-width:760px){.cvs{grid-template-columns:1fr}}
+.pdfbox{margin-top:18px;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--sf);max-width:620px}
+.pdfbox object{width:100%;height:520px;display:block;border:0}
+.pdfbox .fallback{padding:18px;color:var(--mut);font-size:.9rem}
+.tabs2{display:flex;gap:10px;margin:14px 0 4px}
+.tabs2 button{border:1px solid var(--line);background:var(--sf);border-radius:8px;padding:6px 14px;font-size:.9rem;font-weight:600;color:var(--mut);transition:color .18s,border-color .18s}
+.tabs2 button:hover{color:var(--ink)}
+.tabs2 button[aria-pressed="true"]{color:var(--ink);border-color:var(--ac)}
+@media(max-width:760px){.pdfbox object{height:420px}}
+
+#dots{position:fixed;right:18px;top:50%;transform:translateY(-50%);z-index:15;display:flex;flex-direction:column;gap:10px;opacity:0;transition:opacity .35s var(--ease) .15s}
+body[data-v]:not([data-v=start]):not([data-v=menu]) #dots{opacity:1}
+body[data-v=start] #dots,body[data-v=menu] #dots{display:none}
+#dots a{width:10px;height:10px;border-radius:50%;border:2px solid var(--line);background:transparent;display:block;transition:border-color .2s,background .2s,transform .2s;position:relative}
+#dots a:hover{border-color:var(--ac);transform:scale(1.2)}
+#dots a.on{background:var(--ac);border-color:var(--ac);transform:scale(1.2)}
+#dots a::after{content:attr(data-label);position:absolute;right:18px;top:50%;transform:translateY(-50%);white-space:nowrap;font-size:.8rem;background:var(--sf);border:1px solid var(--line);border-radius:6px;padding:3px 8px;opacity:0;pointer-events:none;transition:opacity .18s;color:var(--ink)}
+#dots a:hover::after{opacity:1}
+@media(max-width:760px){#dots{display:none}}
+
+#cp{position:fixed;inset:0;z-index:50;background:rgba(10,18,28,.55);backdrop-filter:blur(4px);display:none;align-items:flex-start;justify-content:center;padding:12vh 16px 16px;opacity:0;transition:opacity .2s var(--ease)}
+#cp.on{display:flex;opacity:1;animation:pageIn .2s var(--ease)}
+#cp .box{background:var(--sf);border:1px solid var(--line);border-radius:14px;width:100%;max-width:520px;overflow:hidden;box-shadow:0 24px 60px -20px rgba(0,0,0,.5)}
+#cp.on .box{animation:rise .3s var(--ease)}
+#cp input{width:100%;border:0;border-bottom:1px solid var(--line);padding:16px 20px;font:inherit;font-size:1.05rem;background:transparent;color:var(--ink);outline:none}
+#cp ul{list-style:none;margin:0;padding:6px 0;max-height:52vh;overflow:auto}
+#cp li button{display:flex;width:100%;align-items:center;gap:12px;padding:12px 20px;background:none;border:0;text-align:left;color:var(--ink);transition:background .15s,color .15s}
+#cp li button:hover,#cp li button.sel{background:var(--bg);color:var(--ac)}
+#cp .mn{width:28px;color:var(--mut);font-size:.82rem}
+#cp small{display:block;color:var(--mut);font-size:.82rem}
+#cp .empty{padding:18px 20px;color:var(--mut)}
+@media(max-width:760px){#cp{padding-top:8vh}}
+
+kbd{border:1px solid var(--line);border-bottom-width:2px;border-radius:5px;padding:1px 6px;font:inherit;font-size:.78rem;background:var(--bg);color:var(--mut)}
+
+/* ==================================================
+   SAKLAR ANIMASI
+   Dikendalikan lewat tombol "Animasi" di pojok kanan atas.
+   Default: nyala (tidak otomatis ikut pengaturan OS).
+================================================== */
+html[data-motion="off"] *,
+html[data-motion="off"] *::before,
+html[data-motion="off"] *::after{animation:none!important;transition:none!important}
+html[data-motion="off"] .boot-lines span{opacity:1}
+html[data-motion="off"] #start.boot .boot-lines{position:static;margin-top:24px}
+</style>
+</head>
+<body data-v="start">
+
+<!-- Semua ikon memakai gaya yang sama (garis 24px, ujung bulat) -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="server" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><path d="M6 6h.01M6 18h.01"/></symbol>
+<symbol id="router" viewBox="0 0 24 24"><rect x="2" y="14" width="20" height="8" rx="2"/><path d="M6 18h.01M10 18h.01M15 10v4"/><path d="M17.84 7.17a4 4 0 0 0-5.66 0"/><path d="M20.66 4.34a8 8 0 0 0-11.31 0"/></symbol>
+<symbol id="network" viewBox="0 0 24 24"><rect x="16" y="16" width="6" height="6" rx="1"/><rect x="2" y="16" width="6" height="6" rx="1"/><rect x="9" y="2" width="6" height="6" rx="1"/><path d="M5 16v-3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3M12 12V8"/></symbol>
+<symbol id="cloud" viewBox="0 0 24 24"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9z"/></symbol>
+<symbol id="monitor" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></symbol>
+<symbol id="code" viewBox="0 0 24 24"><path d="m16 18 6-6-6-6M8 6l-6 6 6 6"/></symbol>
+<symbol id="database" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14a9 3 0 0 0 18 0V5"/><path d="M3 12a9 3 0 0 0 18 0"/></symbol>
+<symbol id="wrench" viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94z"/></symbol>
+<symbol id="shield" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></symbol>
+<symbol id="wallet" viewBox="0 0 24 24"><path d="M20 12V8a2 2 0 0 0-2-2H5a2 2 0 0 1 0-4h13"/><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"/><path d="M18 12a2 2 0 0 0 0 4h4v-4z"/></symbol>
+<symbol id="globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15 15 0 0 1 4 10 15 15 0 0 1-4 10 15 15 0 0 1-4-10 15 15 0 0 1 4-10z"/></symbol>
+<symbol id="music" viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></symbol>
+<symbol id="award" viewBox="0 0 24 24"><circle cx="12" cy="8" r="6"/><path d="M15.5 13.5 17 22l-5-3-5 3 1.5-8.5"/></symbol>
+<symbol id="mail" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></symbol>
+<symbol id="chat" viewBox="0 0 24 24"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22z"/></symbol>
+<symbol id="in" viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></symbol>
+<symbol id="copy" viewBox="0 0 24 24"><rect x="8" y="8" width="14" height="14" rx="2"/><path d="M4 16a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2"/></symbol>
+<symbol id="out" viewBox="0 0 24 24"><path d="M15 3h6v6M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></symbol>
+<symbol id="moon" viewBox="0 0 24 24"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9z"/></symbol>
+<symbol id="sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></symbol>
+<symbol id="pin" viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></symbol>
+<symbol id="down" viewBox="0 0 24 24"><path d="M12 5v14M5 12l7 7 7-7"/></symbol>
+<symbol id="user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></symbol>
+<symbol id="brief" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></symbol>
+<symbol id="play" viewBox="0 0 24 24"><path d="m7 4 13 8-13 8z"/></symbol>
+<symbol id="pause" viewBox="0 0 24 24"><path d="M7 4h3v16H7zM14 4h3v16h-3z"/></symbol>
+<symbol id="left" viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></symbol>
+<symbol id="right" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></symbol>
+<symbol id="dl" viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5M4 21h16"/></symbol>
+<symbol id="file" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h6"/></symbol>
+<symbol id="search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></symbol>
+<symbol id="home" viewBox="0 0 24 24"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .71-1.53l7-6a2 2 0 0 1 2.58 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></symbol>
+<symbol id="zap" viewBox="0 0 24 24"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></symbol>
+<symbol id="zapoff" viewBox="0 0 24 24"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/><path d="m2 2 20 20"/></symbol>
+<symbol id="vol" viewBox="0 0 24 24"><path d="M11 5 6 9H2v6h4l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M19 5a9 9 0 0 1 0 14"/></symbol>
+<symbol id="mute" viewBox="0 0 24 24"><path d="M11 5 6 9H2v6h4l5 4z"/><path d="m17 9 4 6M21 9l-4 6"/></symbol>
+</defs></svg>
+
+<div class="topctrl">
+  <button id="homebtn" data-go="start" title="Kembali ke layar START" aria-label="Kembali ke layar START"><svg class="i"><use href="#home"/></svg><span>Awal</span></button>
+  <button id="cpbtn" title="Cari bagian (Ctrl+K)" aria-label="Buka pencarian"><svg class="i"><use href="#search"/></svg><span>Cari</span></button>
+  <button id="sound" title="Efek suara" aria-label="Hidupkan atau matikan efek suara"><svg class="i"><use id="soundicon" href="#mute"/></svg><span>Suara: mati</span></button>
+  <button id="motion" title="Animasi" aria-label="Hidupkan atau matikan animasi"><svg class="i"><use id="motionicon" href="#zap"/></svg><span>Animasi: nyala</span></button>
+  <button id="theme" title="Tema" aria-label="Ganti tema terang atau gelap"><svg class="i"><use id="themeicon" href="#moon"/></svg><span>Mode gelap</span></button>
+</div>
+
+<nav id="dots" aria-label="Navigasi bagian">
+<a href="#about" data-label="Tentang" data-d="about"></a>
+<a href="#projects" data-label="Project" data-d="projects"></a>
+<a href="#certs" data-label="Sertifikasi" data-d="certs"></a>
+<a href="#experience" data-label="Pengalaman" data-d="experience"></a>
+<a href="#music" data-label="Musik" data-d="music"></a>
+<a href="#cv" data-label="CV" data-d="cv"></a>
+<a href="#contact" data-label="Kontak" data-d="contact"></a>
+</nav>
+
+<div id="start">
+<svg class="sd" viewBox="0 0 220 36" aria-hidden="true"><path class="lk" d="M20 18H110M110 18H200"/><circle cx="20" cy="18" r="7"/><circle cx="110" cy="18" r="7"/><circle cx="200" cy="18" r="7"/></svg>
+<div class="big">Roby Setiadi</div><p>IT Support | Jaringan dan Server</p>
+<button class="startbtn" id="go">START</button><small>Tekan Enter untuk masuk</small>
+<div class="vroom" aria-hidden="true"></div>
+</div>
+
+<div id="menu"><p class="mt">Menu <span style="font-weight:500;letter-spacing:0;opacity:.7">| tombol 1 sampai 7, Ctrl+K, atau Esc untuk kembali</span></p><ul id="ml">
+<li><button data-go="about"><span class="ic"><svg class="i l"><use href="#user"/></svg></span><span class="tx"><b>Tentang</b><small>Profil singkat dan area kerja</small></span><svg class="i arr"><use href="#right"/></svg></button></li>
+<li><button data-go="projects"><span class="ic"><svg class="i l"><use href="#server"/></svg></span><span class="tx"><b>Project</b><small>Server, website, dan produksi musik</small></span><svg class="i arr"><use href="#right"/></svg></button></li>
+<li><button data-go="certs"><span class="ic"><svg class="i l"><use href="#award"/></svg></span><span class="tx"><b>Sertifikasi</b><small>MikroTik, Digital Talent, AWS</small></span><svg class="i arr"><use href="#right"/></svg></button></li>
+<li><button data-go="experience"><span class="ic"><svg class="i l"><use href="#brief"/></svg></span><span class="tx"><b>Pengalaman</b><small>Riwayat kerja dan keahlian</small></span><svg class="i arr"><use href="#right"/></svg></button></li>
+<li><button data-go="music"><span class="ic"><svg class="i l"><use href="#music"/></svg></span><span class="tx"><b>Musik</b><small>Lagu dari Iluvia Records</small></span><svg class="i arr"><use href="#right"/></svg></button></li>
+<li><button data-go="cv"><span class="ic"><svg class="i l"><use href="#file"/></svg></span><span class="tx"><b>CV</b><small>Unduh dalam bahasa Indonesia atau Inggris</small></span><svg class="i arr"><use href="#right"/></svg></button></li>
+<li><button data-go="contact"><span class="ic"><svg class="i l"><use href="#mail"/></svg></span><span class="tx"><b>Kontak</b><small>WhatsApp, email, LinkedIn</small></span><svg class="i arr"><use href="#right"/></svg></button></li>
+</ul>
+<button class="back2" data-go="start"><svg class="i s"><use href="#left"/></svg>Kembali ke awal</button></div>
+
+<div id="app"><nav><div class="wrap"><button class="back" data-go="menu"><svg class="i s"><use href="#left"/></svg>Menu</button><b id="ptitle"></b></div></nav>
+
+<main class="wrap">
+<section class="page hero" data-p="about"><div class="grid">
+<div>
+<h1>Roby Setiadi</h1>
+<p class="role">IT Support</p>
+<p>IT Support di Bina Prestasi Gemilang, Bekasi. Tanggung jawab saya mencakup perangkat dan jaringan kantor, server file internal, serta pengembangan website internal. Saya juga memproduksi musik melalui Iluvia Records.</p>
+<p class="where"><svg class="i s"><use href="#pin"/></svg>Bekasi, Jawa Barat. Terbuka untuk posisi IT Support.</p>
+<div class="cta"><a class="btn p" href="#projects"><svg class="i s"><use href="#down"/></svg>Lihat project</a><a class="btn" href="#contact"><svg class="i s"><use href="#mail"/></svg>Kontak</a></div>
+</div>
+<div class="dg">
+<svg class="d" viewBox="0 0 340 250" aria-label="Diagram jaringan kantor, tiap perangkat bisa diklik">
+<path class="lk" d="M170 52V88"/><path class="lk" d="M170 128V158M54 158H286M54 158V190M170 158V190M286 158V190"/>
+<g class="n" data-k="net" tabindex="0" role="button"><rect x="122" y="12" width="96" height="40" rx="8"/><use href="#globe" x="132" y="24" width="16" height="16"/><text x="154" y="36">Internet</text></g>
+<g class="n" data-k="router" tabindex="0" role="button"><rect x="122" y="88" width="96" height="40" rx="8"/><use href="#router" x="132" y="100" width="16" height="16"/><text x="154" y="112">Router</text></g>
+<g class="n" data-k="pc" tabindex="0" role="button"><rect x="6" y="190" width="96" height="40" rx="8"/><use href="#monitor" x="16" y="202" width="16" height="16"/><text x="38" y="214">PC Staf</text></g>
+<g class="n" data-k="server" tabindex="0" role="button"><rect x="122" y="190" width="96" height="40" rx="8"/><use href="#server" x="132" y="202" width="16" height="16"/><text x="154" y="214">Server</text></g>
+<g class="n" data-k="web" tabindex="0" role="button"><rect x="238" y="190" width="96" height="40" rx="8"/><use href="#code" x="248" y="202" width="16" height="16"/><text x="270" y="214">Website</text></g>
+</svg>
+<div id="info" aria-live="polite"><b>Area kerja</b><span>Pilih perangkat pada diagram untuk melihat tanggung jawab saya di area tersebut.</span></div>
+</div></div></section>
+
+<section class="page" data-p="projects"><h2>Project</h2>
+<div class="tabs" role="group" aria-label="Filter project">
+<button class="tab" data-f="all" aria-pressed="true">Semua</button><button class="tab" data-f="net" aria-pressed="false">Jaringan dan server</button>
+<button class="tab" data-f="web" aria-pressed="false">Website</button><button class="tab" data-f="music" aria-pressed="false">Musik</button></div>
+
+<article class="pj" data-c="net"><div class="ic"><svg class="i l"><use href="#server"/></svg></div><div>
+<h3>Server file internal</h3><p class="meta">Bina Prestasi Gemilang, 2024 – sekarang</p>
+<p>Perusahaan dengan kurang dari 10 karyawan membutuhkan penyimpanan file bersama yang terpusat. Saya membangun server file internal: Samba menyediakan folder bersama di jaringan kantor, dan File Browser memungkinkan akses melalui browser. Saya juga bertanggung jawab atas pengelolaannya.</p>
+<p class="stack">Samba, File Browser, jaringan lokal</p></div></article>
+
+<article class="pj" data-c="web"><div class="ic"><svg class="i l"><use href="#shield"/></svg></div><div>
+<h3>Website sertifikat dengan validasi</h3><p class="meta">Bina Prestasi Gemilang | dikembangkan dengan bantuan AI</p>
+<p>Sertifikat yang diterbitkan perlu dapat diverifikasi keasliannya. Saya memimpin pengembangan website pembuat sertifikat beserta fitur validasinya, mulai dari perencanaan fitur hingga implementasi, dengan AI sebagai alat bantu.</p></div></article>
+
+<article class="pj" data-c="web"><div class="ic"><svg class="i l"><use href="#wallet"/></svg></div><div>
+<h3>Website keuangan internal</h3><p class="meta">Bina Prestasi Gemilang | dikembangkan dengan bantuan AI</p>
+<p>Website untuk pencatatan dan pengelolaan data keuangan internal. Saya memimpin pengembangannya dengan bantuan AI.</p></div></article>
+
+<article class="pj" data-c="web"><div class="ic"><svg class="i l"><use href="#globe"/></svg></div><div>
+<h3>Website WordPress dan SQL</h3><p class="meta">PT. Imos Indonesia (2021) dan pekerjaan berikutnya</p>
+<p>Membangun website WordPress dengan database SQL dan merawatnya, termasuk update plugin, backup data, dan pengelolaan konten. Website pertama selesai dalam 1 bulan.</p>
+<p class="stack">WordPress, SQL</p></div></article>
+
+<article class="pj" data-c="music"><div class="ic"><svg class="i l"><use href="#music"/></svg></div><div>
+<h3>Musik bersama Iluvia Records</h3><p class="meta">Label musik independen milik saya</p>
+<p>Di luar pekerjaan IT, saya memproduksi musik melalui Iluvia Records, label independen yang saya kelola sendiri.</p></div></article>
+</section>
+
+<section class="page" data-p="certs"><h2>Sertifikasi</h2><ul class="certs">
+<li><div class="ic"><svg class="i l"><use href="#router"/></svg></div><div class="ct"><b>MikroTik Certified Network Associate (MTCNA)</b><small>MikroTik | Terbit Jul 2026, berlaku hingga Jul 2029 | ID 2607NA0684</small>
+<div class="act"><button data-copy="2607NA0684"><svg class="i s"><use href="#copy"/></svg><span>Salin ID</span></button><a href="https://mikrotik.com/training/certificates/c750684ca3d4ef0b8b02"><svg class="i s"><use href="#out"/></svg>Verifikasi</a></div></div></li>
+<li><div class="ic"><svg class="i l"><use href="#network"/></svg></div><div class="ct"><b>Intermediate Associate Network Administrator</b><small>Digital Talent Scholarship | Mei 2026 | ID 21212088840-1558</small>
+<div class="act"><button data-copy="21212088840-1558"><svg class="i s"><use href="#copy"/></svg><span>Salin ID</span></button><a href="https://digitalent.komdigi.go.id/cek-sertifikat"><svg class="i s"><use href="#out"/></svg>Verifikasi</a></div></div></li>
+<li><div class="ic"><svg class="i l"><use href="#network"/></svg></div><div class="ct"><b>Associate Network Administrator</b><small>Digital Talent Scholarship | Mar 2026 | ID 21212087840-5484</small>
+<div class="act"><button data-copy="21212087840-5484"><svg class="i s"><use href="#copy"/></svg><span>Salin ID</span></button><a href="https://digitalent.komdigi.go.id/cek-sertifikat"><svg class="i s"><use href="#out"/></svg>Verifikasi</a></div></div></li>
+<li><div class="ic"><svg class="i l"><use href="#cloud"/></svg></div><div class="ct"><b>Cloud Computing – AWS (tingkat dasar)</b><small>Digital Talent Scholarship | Agu 2026 | ID 21212374840-339</small>
+<div class="act"><button data-copy="21212374840-339"><svg class="i s"><use href="#copy"/></svg><span>Salin ID</span></button><a href="https://digitalent.komdigi.go.id/cek-sertifikat"><svg class="i s"><use href="#out"/></svg>Verifikasi</a></div></div></li>
+</ul></section>
+
+<section class="page" data-p="experience"><h2>Pengalaman kerja</h2><ul class="tl">
+<li><b>IT Support, Bina Prestasi Gemilang</b><small>Nov 2024 – sekarang | Bekasi</small><p>Pemeliharaan perangkat dan jaringan, pengelolaan website WordPress, server file internal, dan pengembangan website internal.</p></li>
+<li><b>Surveyor, PT. Bartel Armada Logistik</b><small>Mar 2024 – sekarang | Bekasi</small><p>Inspeksi dan dokumentasi kondisi barang, serta koordinasi dengan klien, pemasok, dan pengirim.</p></li>
+<li><b>Team Leader Digital Marketing dan IT Support, PT. Arief Pratama Sobat Megah</b><small>Feb 2023 – Jul 2023 | Jakarta</small><p>Memimpin tim kreatif untuk kebutuhan campaign pemasaran dan memberikan dukungan IT remote bagi karyawan WFH/WFA.</p></li>
+<li><b>IT Support, PT. Imos Indonesia</b><small>Mar 2021 – Mei 2021 | Jakarta</small><p>Dukungan hardware, software, dan jaringan, serta pembuatan website WordPress.</p></li></ul></section>
+
+<section class="page" data-p="experience"><h2>Keahlian</h2><div class="sk">
+<div><h3><svg class="i"><use href="#server"/></svg>Jaringan dan server</h3><ul><li>Dasar jaringan MikroTik</li><li>Samba dan File Browser</li><li>Dasar AWS</li></ul></div>
+<div><h3><svg class="i"><use href="#database"/></svg>Website dan data</h3><ul><li>WordPress</li><li>SQL dasar</li><li>Pengembangan aplikasi dengan bantuan AI</li></ul></div>
+<div><h3><svg class="i"><use href="#wrench"/></svg>Dukungan teknis</h3><ul><li>Troubleshooting hardware dan software</li><li>Microsoft Office dan Access</li><li>Figma</li></ul></div></div></section>
+
+<section class="page" data-p="music"><h2>Musik</h2>
+<p>Iluvia Records adalah label independen milik saya. Karya yang sudah dirilis dapat didengarkan di halaman ini.</p>
+<div class="pl"><div class="now"><button id="pp" aria-label="Putar atau jeda" disabled><svg class="i"><use id="ppu" href="#play"/></svg></button><div><b id="nt">Belum ada lagu dipilih</b><small id="ns">Pilih lagu dari daftar di bawah</small></div><span class="eq" id="eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span></div>
+<input id="seek" type="range" min="0" max="100" value="0" aria-label="Posisi lagu"><div class="tm"><span id="t1">0:00</span><span id="t2">0:00</span></div></div>
+<ul id="tl2"></ul></section>
+
+<section class="page" data-p="cv"><h2>CV</h2>
+<p>CV tersedia dalam format PDF dengan susunan yang kompatibel dengan sistem ATS. Pratinjau di bawah bisa digulir langsung; tombol unduh tetap tersedia.</p>
+<div class="tabs2" role="group" aria-label="Pilih bahasa CV">
+<button data-lang="id" aria-pressed="true">Bahasa Indonesia</button>
+<button data-lang="en" aria-pressed="false">English</button>
+</div>
+<div class="pdfbox">
+<object id="pdfobj" type="application/pdf" data="cv/Roby_Setiadi_CV_ID.pdf" aria-label="Pratinjau CV bahasa Indonesia">
+<div class="fallback">Browser Anda tidak menampilkan pratinjau PDF. Gunakan tombol unduh di bawah.</div>
+</object>
+</div>
+<div class="cvs">
+<a class="cvc" id="dlid" href="cv/Roby_Setiadi_CV_ID.pdf" download><div class="ic"><svg class="i l"><use href="#file"/></svg></div><b>Bahasa Indonesia</b><small>PDF, 2 halaman</small><span><svg class="i s"><use href="#dl"/></svg>Unduh</span></a>
+<a class="cvc" id="dlen" href="cv/Roby_Setiadi_CV_EN.pdf" download><div class="ic"><svg class="i l"><use href="#file"/></svg></div><b>English</b><small>PDF, 2 pages</small><span><svg class="i s"><use href="#dl"/></svg>Download</span></a>
+</div></section>
+
+<section class="page" data-p="contact"><h2>Kontak</h2>
+<p>Untuk kesempatan kerja atau kolaborasi, silakan hubungi saya melalui kanal berikut.</p>
+<div class="links">
+<a href="https://wa.me/6287826834530"><svg class="i"><use href="#chat"/></svg>WhatsApp</a>
+<a href="mailto:robysetiadi077@gmail.com"><svg class="i"><use href="#mail"/></svg>robysetiadi077@gmail.com</a>
+<a href="https://www.linkedin.com/in/roby-setiadi-9373a1242/"><svg class="i"><use href="#in"/></svg>LinkedIn</a>
+</div>
+</section>
+</main>
+<footer>Roby Setiadi, 2026</footer></div>
+
+<div id="cp" role="dialog" aria-modal="true" aria-label="Pencarian cepat">
+<div class="box">
+<input id="cpin" type="text" placeholder="Cari bagian..." aria-label="Cari bagian">
+<ul id="cpl"></ul>
+</div>
+</div>
+
+<script>
+/* ==================================================
+   KONSTANTA & UTIL
+================================================== */
+const $=id=>document.getElementById(id);
+const start=$('start');
+const PAGES=['about','projects','certs','experience','music','cv','contact'];
+const TITLES={about:'Tentang',projects:'Project',certs:'Sertifikasi',experience:'Pengalaman dan keahlian',music:'Musik',cv:'CV',contact:'Kontak'};
+let booting=false;
+let navTimer=null;
+const motionOn=()=>document.documentElement.dataset.motion!=='off';
+const viewFromHash=()=>{const h=location.hash.slice(1);return (PAGES.includes(h)||h==='menu')?h:'start'};
+
+/* ==================================================
+   Urutan muncul isi halaman: beri nomor --i ke tiap elemen
+================================================== */
+document.querySelectorAll('.page').forEach(pg=>{
+  pg.querySelectorAll('h2,.page>p,.tabs,.tabs2,.pdfbox,.pl,.pj,.certs li,.tl li,.sk>div,.cvc,.links>*,.grid>div:first-child>*').forEach((el,k)=>el.style.setProperty('--i',Math.min(k,9)));
+  pg.querySelectorAll('.n').forEach((el,k)=>el.style.setProperty('--i',k));
+});
+
+/* ==================================================
+   TERAPKAN LAYAR
+   push=false dipakai saat tombol Back browser ditekan.
+================================================== */
+function applyScreen(v,push){
+  document.body.dataset.v=v;
+
+  if(v==='start'){
+    start.hidden=false;
+    start.classList.remove('boot');
+    booting=false;
+  } else {
+    start.hidden=true;
+  }
+
+  document.querySelectorAll('.page').forEach(p=>{
+    p.classList.toggle('on', p.dataset.p===v);
+  });
+
+  $('ptitle').textContent=TITLES[v]||'';
+  document.querySelectorAll('#dots a').forEach(a=>a.classList.toggle('on',a.dataset.d===v));
+
+  const target=(v==='start')?'':'#'+v;
+  if(push!==false && location.hash!==target){
+    try{history.pushState(null,'',target||location.pathname+location.search)}catch(e){}
+  }
+  scrollTo(0,0);
+}
+
+/* ==================================================
+   goTo(v): transisi halus, aman dari klik beruntun
+================================================== */
+function goTo(v,pop){
+  if(v!=='menu' && v!=='start' && !PAGES.includes(v)) v='start';
+
+  if(navTimer){
+    clearTimeout(navTimer);
+    navTimer=null;
+    document.body.classList.remove('fading');
+  }
+  if(document.body.dataset.v===v) return;
+
+  if(!motionOn()){
+    applyScreen(v,!pop);
+    if(v==='menu'){const f=document.querySelector('#ml button');if(f)f.focus()}
+    return;
+  }
+
+  document.body.classList.add('fading');
+  navTimer=setTimeout(()=>{
+    navTimer=null;
+    applyScreen(v,!pop);
+    requestAnimationFrame(()=>{
+      document.body.classList.remove('fading');
+      if(v==='menu'){const f=document.querySelector('#ml button');if(f)f.focus()}
+    });
+  },180);
+}
+
+/* ==================================================
+   START -> BOOT -> MENU
+================================================== */
+function boot(){
+  if(booting)return;
+  booting=true;
+  bootSound();
+  start.classList.add('boot');
+  setTimeout(()=>{
+    if(!booting)return;           // pengguna sudah pindah layar
+    booting=false;
+    goTo('menu');
+  },motionOn()?1400:500);
+}
+
+/* ==================================================
+   KLIK: [data-go] dan link #bagian
+================================================== */
+document.addEventListener('click',e=>{
+  const a=e.target.closest('a[href^="#"]');
+  if(a){
+    const k=a.getAttribute('href').slice(1);
+    if(PAGES.includes(k)){e.preventDefault();beep(520,.05,'sine',.04);goTo(k);return}
+  }
+  const el=e.target.closest('[data-go]');
+  if(!el) return;
+  e.preventDefault();
+  beep(520,.05,'sine',.04);
+  goTo(el.dataset.go);
+});
+
+start.addEventListener('click',e=>{
+  if(e.target.closest('#go') || e.target===start){
+    e.preventDefault();
+    boot();
+  }
+});
+
+/* Tombol Back / Forward browser */
+window.addEventListener('popstate',()=>goTo(viewFromHash(),true));
+
+/* ==================================================
+   INIT
+================================================== */
+applyScreen(viewFromHash(),false);
+
+/* ==================================================
+   TEMA
+================================================== */
+const tb=document.querySelector('#theme span'),ti=$('themeicon');
+let t;try{t=localStorage.getItem('t')}catch(e){}
+if(!t)t=matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light';
+function setT(v){
+  document.documentElement.dataset.theme=v;
+  tb.textContent=v==='dark'?'Mode terang':'Mode gelap';
+  ti.setAttribute('href',v==='dark'?'#sun':'#moon');
+  try{localStorage.setItem('t',v)}catch(e){}
+}
+setT(t);
+$('theme').onclick=()=>setT(document.documentElement.dataset.theme==='dark'?'light':'dark');
+
+/* ==================================================
+   ANIMASI (saklar)
+================================================== */
+const mi=$('motionicon'),ms=document.querySelector('#motion span');
+function setMo(on){
+  document.documentElement.dataset.motion=on?'on':'off';
+  mi.setAttribute('href',on?'#zap':'#zapoff');
+  ms.textContent='Animasi: '+(on?'nyala':'mati');
+  try{localStorage.setItem('mo',on?'1':'0')}catch(e){}
+}
+let mo=true;try{mo=localStorage.getItem('mo')!=='0'}catch(e){}
+setMo(mo);
+$('motion').onclick=()=>setMo(!motionOn());
+
+/* ==================================================
+   SUARA
+================================================== */
+const sb=$('sound'),si=$('soundicon'),ss=sb.querySelector('span');
+let sndOn;try{sndOn=localStorage.getItem('snd')==='1'}catch(e){sndOn=false}
+let AC=null;
+function ac(){if(!AC){try{AC=new (window.AudioContext||window.webkitAudioContext)()}catch(e){AC=null}}return AC}
+function beep(freq,dur,type='sine',gain=.06){
+  if(!sndOn)return;const c=ac();if(!c)return;
+  const o=c.createOscillator(),g=c.createGain();
+  o.type=type;o.frequency.value=freq;g.gain.value=gain;
+  o.connect(g);g.connect(c.destination);
+  const now=c.currentTime;g.gain.setValueAtTime(gain,now);g.gain.exponentialRampToValueAtTime(.0001,now+dur);
+  o.start(now);o.stop(now+dur);
+}
+function bootSound(){if(!sndOn)return;beep(220,.12,'square',.05);setTimeout(()=>beep(330,.14,'square',.05),140);setTimeout(()=>beep(523,.22,'sine',.06),300)}
+function setSnd(v){sndOn=v;si.setAttribute('href',v?'#vol':'#mute');ss.textContent='Suara: '+(v?'nyala':'mati');try{localStorage.setItem('snd',v?'1':'0')}catch(e){}}
+setSnd(sndOn);
+sb.onclick=()=>{setSnd(!sndOn);if(sndOn)beep(660,.08)};
+
+/* ==================================================
+   KEYBOARD
+================================================== */
+document.addEventListener('keydown',e=>{
+  if($('cp').classList.contains('on')){
+    if(e.key==='Escape')closeCP();
+    return;
+  }
+  const tag=(document.activeElement||{}).tagName;
+  const typing=tag==='INPUT'||tag==='TEXTAREA';
+
+  if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){e.preventDefault();openCP();return}
+  if(e.key==='/'&&!e.ctrlKey&&!e.metaKey&&document.body.dataset.v!=='start'&&!typing){e.preventDefault();openCP();return}
+
+  const v=document.body.dataset.v;
+  if(v==='start'){
+    // Enter/Spasi memulai, kecuali fokus sedang di tombol kontrol atas
+    const onCtrl=document.activeElement&&document.activeElement.closest('.topctrl');
+    if((e.key==='Enter'||e.key===' ')&&!onCtrl){e.preventDefault();boot()}
+  }
+  else if(v==='menu'){
+    if(e.key==='ArrowDown'||e.key==='ArrowUp'){
+      e.preventDefault();
+      const it=[...document.querySelectorAll('#ml button')];
+      const i=it.indexOf(document.activeElement);
+      it[(i+(e.key==='ArrowDown'?1:-1)+it.length)%it.length].focus();
+    }
+    else if(/^[1-7]$/.test(e.key))goTo(PAGES[+e.key-1]);
+    else if(e.key==='Escape')goTo('start');
+  }
+  else{
+    if(e.key==='Escape')goTo('menu');
+    else if((e.key==='ArrowLeft'||e.key==='ArrowRight')&&!typing){
+      const i=PAGES.indexOf(v);if(i<0)return;
+      goTo(PAGES[(i+(e.key==='ArrowRight'?1:-1)+PAGES.length)%PAGES.length]);
+    }
+  }
+});
+
+/* ==================================================
+   COMMAND PALETTE
+================================================== */
+const CP=$('cp'),CPI=$('cpin'),CPL=$('cpl');
+const CMD=PAGES.map((k,i)=>({
+  k,n:String(i+1).padStart(2,'0'),t:TITLES[k],
+  d:{about:'Profil singkat dan area kerja',projects:'Server, website, dan produksi musik',certs:'MikroTik, Digital Talent, AWS',experience:'Riwayat kerja dan keahlian',music:'Lagu dari Iluvia Records',cv:'Unduh dan pratinjau CV',contact:'WhatsApp, email, LinkedIn'}[k]
+}));
+CMD.unshift({k:'start',n:'00',t:'Layar awal',d:'Kembali ke layar START'});
+let cpi=0,cpf=CMD.slice();
+function drawCP(){
+  CPL.innerHTML='';
+  if(!cpf.length){CPL.innerHTML='<li class="empty">Tidak ada hasil.</li>';return}
+  cpf.forEach((c,i)=>{
+    const li=document.createElement('li'),b=document.createElement('button');
+    b.className=i===cpi?'sel':'';
+    b.innerHTML='<span class="mn"></span><span><b></b><small></small></span>';
+    b.querySelector('.mn').textContent=c.n;
+    b.querySelector('b').textContent=c.t;
+    b.querySelector('small').textContent=c.d;
+    b.onclick=()=>{goTo(c.k);closeCP()};
+    li.append(b);CPL.append(li);
+  });
+}
+function openCP(){CP.classList.add('on');CPI.value='';cpf=CMD.slice();cpi=0;drawCP();CPI.focus()}
+function closeCP(){CP.classList.remove('on')}
+CPI.addEventListener('input',()=>{
+  const q=CPI.value.trim().toLowerCase();
+  cpf=CMD.filter(c=>!q||c.t.toLowerCase().includes(q)||c.d.toLowerCase().includes(q));
+  cpi=0;drawCP();
+});
+CPI.addEventListener('keydown',e=>{
+  if(e.key==='ArrowDown'){e.preventDefault();cpi=(cpi+1)%Math.max(cpf.length,1);drawCP()}
+  else if(e.key==='ArrowUp'){e.preventDefault();cpi=(cpi-1+cpf.length)%Math.max(cpf.length,1);drawCP()}
+  else if(e.key==='Enter'){e.preventDefault();if(cpf[cpi]){goTo(cpf[cpi].k);closeCP()}}
+});
+CP.addEventListener('click',e=>{if(e.target===CP)closeCP()});
+$('cpbtn').onclick=openCP;
+
+/* ==================================================
+   DIAGRAM
+================================================== */
+const I={
+  net:['Internet','Penanganan gangguan koneksi kantor, dimulai dari pengecekan perangkat jaringan.'],
+  router:['Router dan Wi-Fi','Penanganan kendala Wi-Fi dan router. Pemahaman dasar jaringan didukung sertifikasi MTCNA.'],
+  pc:['Komputer dan laptop karyawan','Troubleshooting dan pemeliharaan hardware serta software, termasuk dukungan remote untuk karyawan WFH/WFA.'],
+  server:['Server file','Server file berbasis Samba dan File Browser untuk tim kurang dari 10 orang, dibangun dan dikelola oleh saya.'],
+  web:['Website','Website sertifikat dengan fitur validasi, website keuangan internal, dan WordPress dengan database SQL.']
+};
+const inf=$('info'),ns=[...document.querySelectorAll('.n')];
+function pick(g){
+  ns.forEach(n=>n.classList.toggle('on',n===g));
+  const d=I[g.dataset.k];
+  inf.innerHTML='<b>'+d[0]+'</b><span>'+d[1]+'</span>';
+  inf.classList.remove('swap');void inf.offsetWidth;inf.classList.add('swap');
+  beep(600,.05,'sine',.04);
+}
+ns.forEach(g=>{
+  g.onclick=()=>pick(g);
+  g.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();pick(g)}}
+});
+
+/* ==================================================
+   FILTER PROJECT
+================================================== */
+const cs=[...document.querySelectorAll('.tab')],ps=[...document.querySelectorAll('.pj')];
+cs.forEach(c=>c.onclick=()=>{
+  cs.forEach(x=>x.setAttribute('aria-pressed',x===c));
+  let k=0;
+  ps.forEach(p=>{
+    const show=c.dataset.f==='all'||p.dataset.c.split(' ').includes(c.dataset.f);
+    p.hidden=!show;
+    if(show)p.style.setProperty('--i',k++);
+  });
+});
+
+/* ==================================================
+   SALIN
+================================================== */
+async function cp(t){
+  try{await navigator.clipboard.writeText(t);return true}
+  catch(e){
+    const a=document.createElement('textarea');
+    a.value=t;a.style.cssText='position:fixed;opacity:0';
+    document.body.appendChild(a);a.select();
+    let ok=false;try{ok=document.execCommand('copy')}catch(e){}
+    a.remove();return ok;
+  }
+}
+document.querySelectorAll('[data-copy]').forEach(b=>b.onclick=async()=>{
+  const s=b.querySelector('span'),o=s.textContent;
+  s.textContent=(await cp(b.dataset.copy))?'Tersalin':'Salin manual: '+b.dataset.copy;
+  setTimeout(()=>s.textContent=o,2500);
+});
+
+/* ==================================================
+   PDF PREVIEW
+================================================== */
+const PDFS={id:'cv/Roby_Setiadi_CV_ID.pdf',en:'cv/Roby_Setiadi_CV_EN.pdf'};
+document.querySelectorAll('.tabs2 button').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('.tabs2 button').forEach(x=>x.setAttribute('aria-pressed',x===b));
+  $('pdfobj').setAttribute('data',PDFS[b.dataset.lang]);
+});
+
+/* ==================================================
+   MUSIK
+   Isi daftar lagu di TRACKS, contoh:
+   const TRACKS=[{title:'Judul Lagu',year:'2026',src:'lagu/judul.mp3',link:'https://open.spotify.com/...'}];
+================================================== */
+const TRACKS=[];
+const au=new Audio(),pp=$('pp'),ppu=$('ppu'),sk=$('seek');
+let cur=-1;
+const fmt=s=>isFinite(s)?Math.floor(s/60)+':'+String(Math.floor(s%60)).padStart(2,'0'):'0:00';
+function drawList(){
+  const ul=$('tl2');ul.innerHTML='';
+  if(!TRACKS.length){ul.innerHTML='<li class="empty">Daftar lagu sedang disiapkan.</li>';return}
+  TRACKS.forEach((t,i)=>{
+    const li=document.createElement('li'),b=document.createElement('button');
+    li.style.setProperty('--i',i);
+    b.className=i===cur?'on':'';
+    b.innerHTML='<span class="mn">'+String(i+1).padStart(2,'0')+'</span><span><b></b><small></small></span>';
+    b.querySelector('b').textContent=t.title;
+    b.querySelector('small').textContent=t.year||'Iluvia Records';
+    b.onclick=()=>play(i);
+    li.append(b);
+    if(t.link){
+      const a=document.createElement('a');
+      a.href=t.link;a.target='_blank';a.rel='noopener';
+      a.textContent='Dengarkan di platform';
+      li.append(a);
+    }
+    ul.append(li);
+  });
+}
+function play(i){
+  const t=TRACKS[i];
+  if(!t.src){if(t.link)window.open(t.link,'_blank');return}
+  cur=i;au.src=t.src;
+  au.play().catch(()=>{});
+  $('nt').textContent=t.title;
+  $('ns').textContent=t.year||'Iluvia Records';
+  pp.disabled=false;
+  document.querySelectorAll('#tl2 button').forEach((b,k)=>b.classList.toggle('on',k===i));
+}
+pp.onclick=()=>au.paused?au.play().catch(()=>{}):au.pause();
+au.onplay=()=>{ppu.setAttribute('href','#pause');$('eq').classList.add('on')};
+au.onpause=()=>{ppu.setAttribute('href','#play');$('eq').classList.remove('on')};
+au.ontimeupdate=()=>{sk.value=au.duration?au.currentTime/au.duration*100:0;$('t1').textContent=fmt(au.currentTime);$('t2').textContent=fmt(au.duration)};
+sk.oninput=()=>{if(au.duration)au.currentTime=sk.value/100*au.duration};
+au.onended=()=>{if(cur+1<TRACKS.length)play(cur+1)};
+drawList();
+</script>
+</body>
+</html>
