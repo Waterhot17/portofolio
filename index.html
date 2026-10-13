@@ -340,6 +340,29 @@ kbd{border:1px solid var(--line);border-bottom-width:2px;border-radius:5px;paddi
 #trl small{display:block;color:var(--mut);font-size:.8rem;line-height:1.3}
 
 /* ==================================================
+   RAHASIA: DANAU (easter egg)
+================================================== */
+#lake{position:fixed;inset:0;z-index:55;background:#08121d;display:flex;align-items:center;justify-content:center;color:#fff;outline:none}
+#lake[hidden]{display:none}
+#lake.tp{animation:tpIn .9s var(--ease)}
+#lake.tpout{animation:tpOut .5s ease-in forwards}
+@keyframes tpIn{from{clip-path:circle(0% at 50% 50%);filter:brightness(2.2) saturate(1.6)}to{clip-path:circle(150% at 50% 50%);filter:none}}
+@keyframes tpOut{to{clip-path:circle(0% at 50% 50%);filter:brightness(2.2)}}
+#lkc{width:min(100vw,calc(100vh*16/9));aspect-ratio:16/9;image-rendering:pixelated;display:block;cursor:pointer}
+#lkhud{position:absolute;top:14px;left:16px;display:flex;flex-wrap:wrap;gap:6px 18px;font-size:.9rem;text-shadow:0 1px 3px rgba(0,0,0,.7)}
+#lkbar{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);display:flex;gap:8px;flex-wrap:wrap;justify-content:center;width:min(94vw,640px)}
+#lkbar button,#lkopt button{background:rgba(14,20,30,.88);color:#fff;border:1px solid rgba(255,255,255,.24);border-radius:999px;padding:8px 16px;font-size:.88rem;transition:border-color .18s,background .18s}
+#lkbar button:hover,#lkopt button:hover{border-color:#8ec5ff}
+#lkreel.hot{background:#e5392e;border-color:#fff;animation:hotp .5s ease-in-out infinite alternate}
+@keyframes hotp{to{transform:scale(1.07)}}
+#lkdlg{position:absolute;left:50%;bottom:64px;transform:translateX(-50%);width:min(92vw,560px);background:rgba(14,20,30,.93);border:1px solid rgba(255,255,255,.2);border-radius:14px;padding:14px 18px;backdrop-filter:blur(8px)}
+#lkdlg[hidden]{display:none}
+#lkname{font-weight:800;font-size:.82rem;color:#8ec5ff;margin-bottom:4px}
+#lktx{min-height:3.3em;max-width:none}
+#lkopt{display:flex;flex-direction:column;align-items:flex-start;gap:6px;margin-top:10px}
+body.lk{overflow:hidden}
+
+/* ==================================================
    SAKLAR ANIMASI
    Dikendalikan lewat tombol "Animasi" di pojok kanan atas.
    Default: nyala (tidak otomatis ikut pengaturan OS).
@@ -546,6 +569,13 @@ html[data-motion="off"] *::after{animation:none!important;transition:none!import
 
 <div id="toasts" role="status" aria-live="polite"></div>
 <div id="trp" hidden role="dialog" aria-label="Daftar trofi"><h3>Trofi <span id="trc"></span></h3><ul id="trl"></ul></div>
+
+<div id="lake" hidden tabindex="-1" role="dialog" aria-label="Danau rahasia">
+<canvas id="lkc" width="320" height="180" aria-label="Pemandangan danau 2D, Roby sedang memancing"></canvas>
+<div id="lkhud"><span id="lkst">Menunggu ikan...</span><span id="lkn">Tangkapan: 0</span></div>
+<div id="lkdlg" hidden><div id="lkname">Roby</div><p id="lktx"></p><div id="lkopt"></div></div>
+<div id="lkbar"><button id="lkreel">Tarik (Spasi)</button><button id="lktalk">Ngobrol (E)</button><button id="lkx">Keluar (Esc)</button></div>
+</div>
 
 <div id="cp" role="dialog" aria-modal="true" aria-label="Pencarian cepat">
 <div class="box">
@@ -1013,6 +1043,7 @@ const TROPHIES=[
 {id:'cv',k:'silver',t:'Dokumen siap',d:'Unduh salah satu CV.'},
 {id:'search',k:'silver',t:'Jalan pintas',d:'Gunakan pencarian cepat.'},
 {id:'all',k:'gold',t:'Penjelajah',d:'Buka ketujuh halaman.'},
+{id:'egg',k:'gold',t:'Pemancing',d:'Temukan tempat rahasia.',h:1},
 {id:'plat',k:'plat',t:'Platinum',d:'Dapatkan semua trofi lainnya.'}];
 const KL={bronze:'perunggu',silver:'perak',gold:'emas',plat:'platinum'};
 let got=[],pgs=[];const nodes=new Set();
@@ -1035,7 +1066,7 @@ function drawTr(){
     li.className=on?'got':'';
     li.innerHTML='<div class="ti"><svg class="i"><use href="#trophy"/></svg></div><div><b></b><small></small></div>';
     li.querySelector('.ti').classList.add(on?T.k:'lock');
-    li.querySelector('b').textContent=T.t;li.querySelector('small').textContent=T.d;
+    const hid=T.h&&!on;li.querySelector('b').textContent=hid?'???':T.t;li.querySelector('small').textContent=hid?'Trofi rahasia':T.d;
     ul.append(li);
   });
   $('trc').textContent=got.length+' / '+TROPHIES.length;
@@ -1060,6 +1091,161 @@ window.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('trp').hidden){$('
 document.querySelectorAll('.cvc').forEach(a=>a.addEventListener('click',()=>trophy('cv')));
 drawTr();window.trReady=true;
 {const v0=document.body.dataset.v;if(PAGES.includes(v0))seen(v0)}
+
+/* ==================================================
+   RAHASIA: DANAU. Cara buka: ketik "mancing", kode Konami,
+   atau ketuk tulisan di footer 5 kali.
+================================================== */
+(function(){
+const lake=$('lake'),cv=$('lkc'),g=cv.getContext?cv.getContext('2d'):null;
+let on=false,talk=false,last=0,node=null,tw=null,nCatch=0;
+const F={st:'wait',at:0,end:0};
+const ITEMS=[['Ikan nila',3],['Ikan mas',3],['Ikan lele',2],['Sepatu bekas',1],['Kabel LAN putus',2],['Flashdisk basah',1],['Router bekas',1],['Email lamaran tanpa balasan',2],['Brosur lowongan: pengalaman 3 tahun',1],['Lowongan: wajib S1 buat install Windows',1]];
+const pickItem=()=>{let r=Math.random()*ITEMS.reduce((x,y)=>x+y[1],0),i=0;for(;i<ITEMS.length;i++){r-=ITEMS[i][1];if(r<0)break}return ITEMS[Math.min(i,ITEMS.length-1)][0]};
+const setSt=t=>{$('lkst').textContent=t};
+const arm=()=>{F.st='wait';F.at=performance.now()+3000+Math.random()*5000};
+
+/* Dialog: Roby yang bicara, pengunjung memilih pertanyaan */
+const DL={
+ s:{t:'Hmm? Wah, ada yang nemu tempat ini. Duduk aja, santai.',o:[['Kamu kok ga kerja?','w'],['Dapat ikan apa saja?','f'],['Boleh minta CV-nya?','cv'],['Pamit dulu','x']]},
+ w:{t:'Bagaimana mau kerja, ekonomi begini. Terus HRD di Indonesia pada aneh-aneh semua.',o:[['Kamu menghina HRD Indonesia?','h'],['Aneh gimana maksudnya?','a']]},
+ h:{t:'Aku cuma ngomong fakta.',o:[['Fakta apa buktinya?','a'],['Yakin nggak takut nggak dipanggil?','t']]},
+ a:{t:'Mau yang mana dulu? Stok keluhanku banyak.',o:[['Soal pengalaman 3 tahun','a1'],['Soal syarat S1','b1'],['Soal jobdesk dan gaji','c1'],['Soal interview dan ghosting','d1'],['Cukup, aku paham','j']]},
+ a1:{t:'Lowongan "fresh graduate", syaratnya pengalaman minimal 3 tahun. Fresh graduate dari zaman kapan itu?',o:[['Dan?','a2']]},
+ a2:{t:'Usia maksimal 23 tahun, pengalaman minimal 3 tahun. Berarti harus mulai kerja umur 20, sambil kuliah. Hitungannya nggak ketemu.',o:[['Topik lain','a']]},
+ b1:{t:'Masa IT Support harus S1? Dikira lulusan SMK TKJ itu nggak boleh jadi IT Support doang.',o:[['Emang kerjaannya apa?','b2']]},
+ b2:{t:'Jobdesknya rakit PC, install Windows, benerin printer, reset password. Itu praktikum anak SMK TKJ. Masa buat itu harus S1? Yang lulusan SMK emang nggak bisa?',o:[['Hmm, iya juga','b3']]},
+ b3:{t:'Bukan berarti S1 itu nggak penting. Tapi buat rakit PC dan install Windows, yang dicari itu tangan yang sudah biasa, bukan gelar.',o:[['Bukannya kamu kuliah juga?','b4'],['Topik lain','a']]},
+ b4:{t:'Iya, aku lagi kuliah Ilmu Komputer. Tapi bukan itu poinnya. SMK itu sekolah buat langsung kerja, masa lulusannya disuruh antre di belakang S1.',o:[['Topik lain','a']]},
+ c1:{t:'Posisi IT Support, tapi harus bisa desain grafis, edit video, jaga toko, dan siap lembur. Satu orang, lima jabatan.',o:[['Gajinya?','c2']]},
+ c2:{t:'Gajinya "sesuai UMR". Kalau beruntung. Kalau nggak, "bisa dinegosiasikan".',o:[['Ada lagi?','c3']]},
+ c3:{t:'Ada juga yang minta bisa nyetir, punya motor sendiri, dan domisili dekat kantor. Kayaknya nyari asisten pribadi, bukan IT.',o:[['Topik lain','a']]},
+ d1:{t:'Minta "berpenampilan menarik" dan pas foto 3x4 terbaru. Aku melamar jadi teknisi, bukan jadi model katalog.',o:[['Terus?','d2']]},
+ d2:{t:'Interview tiga tahap, habis itu hilang. Dikabari? Nggak. Ghosting itu bukan cuma urusan percintaan.',o:[['Ada lagi?','d3']]},
+ d3:{t:'Yang paling lucu: "hanya kandidat terpilih yang akan dihubungi". Berarti diam itu jawaban, ya?',o:[['Topik lain','a']]},
+ j:{t:'Tapi ya, nggak semua HRD begitu. Kalau syaratnya wajar, aku siap kapan saja. Kemeja putih dan dasi ini sudah disetrika dari pagi.',o:[['Oke, aku buka Kontak','k'],['Lanjut ngobrol','s']]},
+ t:{t:'Justru itu kemejanya sudah disetrika dari pagi. Siapa tahu hari ini ada telepon.',o:[['Haha, oke','s']]},
+ m:{t:'Mancing. Ikan nggak pernah minta pengalaman tiga tahun buat posisi entry level.',o:[['Benar juga','s']]},
+ f:{t:()=>nCatch?('Sejauh ini '+nCatch+' tangkapan. Ikan bisa kutarik, panggilan interview belum.'):'Belum ada. Ikannya ngambek, sama kayak lowongan yang katanya "segera dipanggil".',o:[['Semangat, ya','s']]},
+ cv:{t:'Boleh. Ada di menu CV, tinggal klik unduh. Tanpa pas foto 3x4.',o:[['Buka CV','gcv'],['Nanti saja','s']]}
+};
+function say(text){
+  clearInterval(tw);const el=$('lktx');
+  if(!motionOn()){el.textContent=text;return}
+  el.textContent='';let i=0;
+  tw=setInterval(()=>{el.textContent=text.slice(0,++i);if(i>=text.length)clearInterval(tw)},22);
+}
+function openDlg(k){
+  talk=true;node=DL[k];$('lkdlg').hidden=false;
+  say(typeof node.t==='function'?node.t():node.t);
+  const box=$('lkopt');box.innerHTML='';
+  node.o.forEach(([label,to],i)=>{
+    const b=document.createElement('button');b.textContent=(i+1)+'. '+label;
+    b.onclick=()=>choose(to);box.append(b);
+  });
+  setSt('Sedang ngobrol');
+}
+function closeDlg(){talk=false;clearInterval(tw);$('lkdlg').hidden=true;setSt(F.st==='bite'?'Ada yang menarik! Tarik sekarang!':'Menunggu ikan...')}
+function choose(to){
+  if(to==='x'){exitLake();return}
+  if(to==='k'){exitLake();goTo('contact');return}
+  if(to==='gcv'){exitLake();goTo('cv');return}
+  openDlg(to);
+}
+
+/* Memancing */
+function reel(){
+  if(!on||talk)return;
+  if(F.st==='bite'){
+    const it=pickItem();nCatch++;F.st='catch';F.end=performance.now()+1800;
+    $('lkn').textContent='Tangkapan: '+nCatch;setSt('Dapat: '+it+'!');
+    toast(it,'Tangkapan ke-'+nCatch,'award');beep(660,.08);
+  }else if(F.st==='wait')setSt('Belum ada ikan. Sabar.');
+}
+function step(now){
+  const dt=now-last;last=now;
+  if(talk){F.at+=dt;F.end+=dt;return}
+  if(F.st==='wait'&&now>F.at){F.st='bite';F.end=now+1500;setSt('Ada yang menarik! Tarik sekarang!');beep(740,.1,'square',.05)}
+  else if(F.st==='bite'&&now>F.end){F.st='miss';F.end=now+1400;setSt('Ikannya kabur.')}
+  else if((F.st==='catch'||F.st==='miss')&&now>F.end){arm();setSt('Menunggu ikan...')}
+  $('lkreel').classList.toggle('hot',F.st==='bite');
+}
+
+/* Gambar: pixel art 320x180 */
+function px(x,y,w,h,c){g.fillStyle=c;g.fillRect(x|0,y|0,w|0||1,h|0||1)}
+function draw(now){
+  if(!g)return;
+  const t=now/1000;
+  ['#8fcdf3','#a3d6f2','#bbdff0','#d3e7ea','#ecE6d4','#f6dcc2'].forEach((c,i)=>px(0,i*16,320,16,c));
+  for(let dy=-13;dy<=13;dy++){const w=Math.sqrt(169-dy*dy)*2;px(240-w/2,56+dy,w,1,'#fff3bd')}
+  [[20,18,.0],[130,30,.5],[250,12,1]].forEach(([x0,y0,o])=>{const x=((t*5+x0+o*100)%400)-50;px(x,y0,34,6,'#fff');px(x+6,y0-4,20,5,'#fff');px(x+20,y0+4,22,4,'#f4f8fb')});
+  for(let x=0;x<320;x++){const h1=20+10*Math.sin(x/23)+6*Math.sin(x/9),h2=12+8*Math.sin(x/17+2)+4*Math.sin(x/6);px(x,96-h1,1,h1,'#7aa5bd');px(x,96-h2,1,h2,'#557f93')}
+  ['#4b9acf','#4592c8','#3f8bc0','#3a84b8','#357db0'].forEach((c,i)=>px(0,96+i*17,320,17,c));
+  g.globalAlpha=.55;for(let y=98;y<150;y+=3){const w=10+8*Math.sin(t*2+y)+(y-98)/4;px(240-w/2,y,w,1,'#fff3bd')}g.globalAlpha=1;
+  g.globalAlpha=.35;for(let i=0;i<14;i++){const y=104+i*5.4,x=((i*47+t*(7+(i%3)*3))%360)-30;px(x,y,16+(i%4)*4,1,'#fff')}g.globalAlpha=1;
+  px(0,120,142,6,'#8b5a2b');px(0,120,142,1,'#b07a40');[28,78,128].forEach(x=>px(x,126,4,26,'#5e3c1b'));
+  const br=Math.sin(t*1.6),sw=Math.sin(t*2)*1.5;
+  px(112+sw,121,4,10,'#2b3445');px(118-sw,121,4,10,'#2b3445');px(111+sw,131,6,2,'#111');px(117-sw,131,6,2,'#111');
+  px(108,104,14,17,'#f2f4f7');px(114,106,3,12,'#1f3c88');
+  px(110,92+(br>0?0:1),10,12,'#c58f64');px(109,90+(br>0?0:1),12,4,'#15110e');px(109,92+(br>0?0:1),2,7,'#15110e');px(117,97,1,2,'#111');
+  px(120,108,10,3,'#f2f4f7');px(130,108,3,3,'#c58f64');
+  for(let i=0;i<=48;i++)px(131+i,108-i*42/48,1,1,'#3b2a1a');
+  const tipX=179,tipY=66;let bx=185,by=112+Math.sin(t*2)*1;
+  if(F.st==='bite'){by=117+Math.sin(t*34)*1.5;px(116,78,2,6,'#e5392e');px(116,86,2,2,'#e5392e')}
+  if(F.st==='catch'){bx=tipX;by=74;px(tipX-3,78,7,3,'#f59e0b');px(tipX+4,78,2,3,'#f59e0b')}
+  const ly=Math.max(by-tipY,1);for(let y=tipY;y<=by;y++)px(tipX+(bx-tipX)*(y-tipY)/ly,y,1,1,'#eef2f5');
+  px(bx-2,by-2,5,3,'#e5392e');px(bx-2,by+1,5,2,'#fff');
+  if(F.st==='wait'||F.st==='bite'){g.globalAlpha=.4;px(bx-6,116+(by>114?1:0),13,1,'#fff');g.globalAlpha=1}
+}
+function loop(now){
+  if(!on)return;
+  if(!last)last=now;
+  step(now);draw(now);requestAnimationFrame(loop);
+}
+
+/* Masuk dan keluar */
+function enterLake(){
+  if(on)return;
+  on=true;last=0;F.st='wait';nCatch=0;$('lkn').textContent='Tangkapan: 0';
+  lake.hidden=false;lake.classList.remove('tpout');lake.classList.remove('tp');void lake.offsetWidth;lake.classList.add('tp');
+  document.body.classList.add('lk');
+  arm();trophy('egg');beep(392,.12,'sine',.05);setTimeout(()=>beep(587,.2,'sine',.05),120);
+  lake.focus();openDlg('s');
+  requestAnimationFrame(loop);
+}
+function exitLake(){
+  if(!on)return;
+  on=false;talk=false;clearInterval(tw);
+  lake.classList.remove('tp');lake.classList.add('tpout');
+  setTimeout(()=>{lake.hidden=true;lake.classList.remove('tpout');$('lkdlg').hidden=true;document.body.classList.remove('lk')},motionOn()?500:0);
+}
+cv.addEventListener('click',reel);
+$('lkreel').onclick=reel;
+$('lktalk').onclick=()=>{talk?closeDlg():openDlg('s')};
+$('lkx').onclick=exitLake;
+
+/* Pemicu rahasia + kunci saat di danau */
+const KON=['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
+let kbuf=[],sbuf='';
+window.addEventListener('keydown',e=>{
+  if(on){
+    const k=e.key;e.stopImmediatePropagation();
+    if(k==='Escape'){e.preventDefault();talk?closeDlg():exitLake();return}
+    const onBtn=e.target.closest&&e.target.closest('button');
+    if(!onBtn&&(k===' '||k==='Enter')){e.preventDefault();reel();return}
+    if(k==='e'||k==='E'){e.preventDefault();talk?closeDlg():openDlg('s');return}
+    if(talk&&/^[1-9]$/.test(k)){const b=$('lkopt').children[+k-1];if(b)b.click()}
+    return;
+  }
+  if(e.ctrlKey||e.metaKey||e.altKey)return;
+  if(e.target.closest&&e.target.closest('input,textarea'))return;
+  const k=e.key;kbuf.push(k.length===1?k.toLowerCase():k);kbuf=kbuf.slice(-10);
+  if(kbuf.length===10&&KON.every((x,i)=>kbuf[i]===x))enterLake();
+  if(k.length===1){sbuf=(sbuf+k.toLowerCase()).slice(-7);if(sbuf==='mancing')enterLake()}
+},true);
+let ft=0,ftm=0;
+document.querySelector('footer').addEventListener('click',()=>{const n=Date.now();ft=n-ftm<1500?ft+1:1;ftm=n;if(ft>=5){ft=0;enterLake()}});
+})();
 </script>
 </body>
 </html>
